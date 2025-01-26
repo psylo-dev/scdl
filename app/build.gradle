@@ -19,96 +19,65 @@ android {
             cmake {
                 arguments "-DAPPLICATION_ID:STRING=${applicationId}"
             }
-            }
-            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-            vectorDrawables {
-                useSupportLibrary true
-            }
+        }
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
     }
     flavorDimensions += "cpuArch"
     productFlavors {
-        arch_arm32 {
-            dimension 'cpuArch'
-            versionCode 4*1000+1
-            versionNameSuffix "-arm32"
-        }
         arch_arm64 {
             dimension 'cpuArch'
             versionCode 3*1000+1
             versionNameSuffix "-arm64"
         }
-        arch_x86 {
-            dimension 'cpuArch'
-            versionCode 2*1000+1
-            versionNameSuffix "-x86"
-        }
-        arch_x86_64 {
-            dimension 'cpuArch'
-            versionCode 1*1000+1
-            versionNameSuffix "-x86_64"
+    }
+    buildFeatures.viewBinding = true
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
-        buildFeatures.viewBinding = true
-        buildTypes {
-            release {
-                minifyEnabled false
-                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-                signingConfig signingConfigs.debug
-            }
-        }
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_17
-            targetCompatibility JavaVersion.VERSION_17
-        }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
     kotlin {
         sourceSets {
-            debug{
+            debug {
                 kotlin.srcDir("build/generated/ksp/debug/kotlin")
             }
-            release{
+            release {
                 kotlin.srcDir("build/generated/ksp/release/kotlin")
             }
         }
     }
-        kotlinOptions {
-            freeCompilerArgs += [
-                    "-Xjvm-default=all"
-            ]
-        }
-        composeOptions {
+    kotlinOptions {
+        freeCompilerArgs += [
+            "-Xjvm-default=all"
+        ]
+    }
+    composeOptions {
         kotlinCompilerExtensionVersion = "1.5.3"
-        }
-        buildFeatures {
-            compose true
-        }
-    splits{
+    }
+    buildFeatures {
+        compose true
+    }
+    splits {
         abi {
             enable true
             reset()
-            include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+            include 'arm64-v8a'
             universalApk false
         }
     }
     sourceSets {
-
-        arch_arm64{
+        arch_arm64 {
             sourceSets {
                 assets.srcDirs = ["arch_arm64-v8a/assets"]
-            }
-        }
-        arch_arm32 {
-            sourceSets {
-                assets.srcDirs = ["arch_arm32/assets"]
-            }
-        }
-        arch_x86 {
-            sourceSets {
-                assets.srcDirs = ["arch_x86/assets"]
-            }
-        }
-        arch_x86_64 {
-            sourceSets {
-                assets.srcDirs = ["arch_x86_64/assets"]
             }
         }
     }
@@ -118,9 +87,10 @@ android {
         }
     }
 }
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.*'])
-    //Android Related
+    // Android Related
     implementation('androidx.core:core-ktx:1.12.0')
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation "androidx.datastore:datastore-preferences:1.0.0"
@@ -139,7 +109,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     implementation("androidx.compose.ui:ui-tooling-preview")
 
-    // lib AndroidUtilCode by  BlankJ
+    // lib AndroidUtilCode by BlankJ
     implementation("com.blankj:utilcodex:1.31.1")
 
     // lib terminal-view and terminal-editor by Termux
@@ -166,4 +136,3 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-test-manifest:1.5.4'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
 }
-
